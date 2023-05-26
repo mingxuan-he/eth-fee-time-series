@@ -1,4 +1,4 @@
-# Large-scale time series modeling of Ethereum transaction fees with AWS and PySpark
+# Large-scale time series modeling of Ethereum transaction fees with AWS and PySpark ML
 Author: Mingxuan (Ming) He  
 Email:  mingxuanh@uchicago.edu
 
@@ -9,7 +9,7 @@ With the rising popularity of blockchain technologies and cryptocurrencies, ther
 
 Blockchain transactions data features both large volume and high velocity. Ethereum, for example, generates 7200 blocks documenting ~1 million new public transactions every day. Because of this big and always-on character, traditional social scientific methods are inadequate for analyzing this dataset.
 
-**In this project, I build a large-scale computing and machine learning pipeline using AWS and PySpark to conduct time series modeling for transaction fees on the Ethereum blockchain**. Large-scale and cloud computing tools enable me to analyze this immense dataset in a timely and cost-effective manner. I use AWS's EMR clusters to provide scalable computing power, and the PySpark framework for leveraging distributed processing capabilities and reproducibility.
+**In this project, I build a large-scale computing and machine learning pipeline using AWS and PySpark ML to conduct time series modeling for transaction fees on the Ethereum blockchain**. Large-scale and cloud computing tools enable me to analyze this immense dataset in a timely and cost-effective manner. I use AWS's EMR clusters to provide scalable computing power, and the PySpark framework for leveraging distributed processing capabilities and reproducibility.
 
 This project is a milestone towards my thesis research, which focuses on **dynamic economic modeling for optimal cryptoeconomic policies**. In particular, the time series model parameters estimated here will enter my calibration process for a larger model on the macro-cryptoeconomy, and help dynamically optimizing protocol policies in the form of staking and burning (more details on [my personal website](https://sites.google.com/view/mingxuanhe/projects?authuser=0#h.7d9csc2ft4uk)).
 
@@ -40,12 +40,13 @@ See [Spark_EDA_TSTests.ipynb](Code/Spark_EDA_TSTests.ipynb)
 * Time series tests: stationarity test and serial correlation test (functions implemented in [time_series_tests.py](Code/time_series_tests.py))
 
 ### Part 3: Time series modeling pipeline with Spark ML: 
-See [Spark_Pipeline_Modeling.ipynb](Code/Spark_Modeling_Pipeline.ipynb)
+See [Spark_Pipeline_Modeling.ipynb](Code/Spark_Modeling_Pipeline.ipynb)  
+(For this section I increased the EMR Cluster size to 8 m5.xlarge instances)
 
 3.1 Build a custom pipeline for preprocessing & model estimation  
 * Pipeline structure: see direct acyclic graph below. Contains 3 custom transformers and 3 transformer/estimators from `ml` library
 
-* The model: $AR(p)$ model with non-zero mean:  
+* The model: $AR(p)$ model with non-zero constant:  
 $\varphi_t = c + \Sigma_{j=1}^p \rho_j \cdot \varphi_{t-j} + \varepsilon_t,\quad \varepsilon_t \sim N(0,\sigma_\varepsilon^2),$  
 where $\varphi_t$ 
 : is the transaction fee (`txn_fee`) for a period $t$, and  
@@ -61,7 +62,7 @@ Since Spark ML's `CrossValidation` and `TrainValidationSplit` executes random sp
 * `TimeSeriesSplit`: Custom index-based train-test split function suitable for time series data
 * `LRTuning`: Custom grid search function for model evalation/tuning  
 
-Hyperparmeters fixed: `maxIter=10`, `lags=20`  
+Hyperparmeters fixed: `maxIter=10`, `lags=5`  
 Hyperparameters tuned: `regParam` $\lambda\in[0.01,0.1]$, `elasticNetParam` $\alpha\in\{0,1\}$  
 
 3.3 Forecasting  
