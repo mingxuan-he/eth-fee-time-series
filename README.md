@@ -54,7 +54,7 @@ $\Theta:=\{(c,\rho_1,...,\rho_p, \sigma_\varepsilon^2): c\in\mathbb{R},\ \rho_j\
 is the parameter space, with $\sigma_\varepsilon^2$ as a nuisance parameter.  
 
 * Direct acyclic graph for the parameterized pipeline:  
-![pipeline](figures/pipeline_DAG.svg)
+![pipeline](https://github.com/mingxuan-he/eth-fee-time-series/blob/master/figures/pipeline_DAG.svg)
 
 3.2 Hyperparameter tuning with grid search  
 
